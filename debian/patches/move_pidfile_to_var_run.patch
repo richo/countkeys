@@ -1,0 +1,13 @@
+Index: logkeys-0.1.0/src/logkeys.cc
+===================================================================
+--- logkeys-0.1.0.orig/src/logkeys.cc	2010-02-23 22:57:49.972940870 +0100
++++ logkeys-0.1.0/src/logkeys.cc	2010-02-23 22:58:11.544496882 +0100
+@@ -20,7 +20,7 @@
+ #include <config.h>  // config produced from ./configure
+ 
+ #define DEFAULT_LOG_FILE "/var/log/logkeys.log"
+-#define TMP_PID_FILE     "/tmp/logkeys.pid.lock"
++#define TMP_PID_FILE     "/var/run/logkeys.pid.lock"
+ 
+ #ifdef INPUT_EVENT_PREFIX  // may be defined by ./configure --enable-evdev-path=PATH
+ # define INPUT_EVENT_PATH (INPUT_EVENT_PREFIX "/event")  // in which case use it

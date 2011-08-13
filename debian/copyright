@@ -1,0 +1,39 @@
+This work was packaged for Debian by:
+
+    Vedran Furač <vedran.furac@gmail.com> on Sun, 07 Feb 2010 01:06:25 +0100
+
+It was downloaded from:
+
+    http://logkeys.googlecode.com/files/logkeys-0.1.0.tar.gz
+
+Upstream Author(s):
+
+    Kernc <kerncece+logkeys@gmail.com>
+
+Copyright:
+
+    Copyright (C) 2000 Kernc
+
+License:
+
+            DO WHAT THE FUCK YOU WANT TO PUBLIC LICENSE
+                    Version 2, December 2004
+
+ Copyright (C) 2004 Sam Hocevar
+  14 rue de Plaisance, 75014 Paris, France
+
+ Everyone is permitted to copy and distribute verbatim or modified
+ copies of this license document, and changing it is allowed as long
+ as the name is changed.
+
+            DO WHAT THE FUCK YOU WANT TO PUBLIC LICENSE
+   TERMS AND CONDITIONS FOR COPYING, DISTRIBUTION AND MODIFICATION
+
+  0. You just DO WHAT THE FUCK YOU WANT TO.
+
+The Debian packaging is:
+
+    Copyright (C) 2010 Vedran Furač <vedran.furac@gmail.com>
+
+and is licensed under the WHAT THE FUCK YOU WANT TO PUBLIC LICENSE, see above.
+

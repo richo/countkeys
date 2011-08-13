@@ -1,0 +1,7 @@
+ENABLED=0
+LOGFILE=/var/log/logkeys
+
+# This should be updated according to your hardware
+# Check README.Debian for more info
+DEVICE=/dev/input/event5
+

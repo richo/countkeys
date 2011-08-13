@@ -1,0 +1,3 @@
+disable-install-exec-hook.patch # don't suid
+disable-dev-input-checks.patch # no /dev/input in pbuilder
+move_pidfile_to_var_run.patch

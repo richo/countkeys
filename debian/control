@@ -1,0 +1,19 @@
+Source: logkeys
+Section: admin
+Priority: optional
+Maintainer: Vedran Furač <vedran.furac@gmail.com>
+Build-Depends: cdbs, debhelper (>= 7), autotools-dev, quilt, console-tools,
+                procps
+Standards-Version: 3.8.4
+Homepage: http://code.google.com/p/logkeys/
+
+Package: logkeys
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: a keylogger for GNU/Linux systems
+ Logkeys is no more advanced than other available Linux keyloggers, but is a
+ bit more up to date, it doesn't unreliably repeat keys and it should never
+ crash your X.  All in all, it just seems to work.  It relies on event
+ interface of the Linux input subsystem.  Once set, it logs all common
+ character and function keys, while also being fully aware of Shift and
+ AltGr key modifiers.

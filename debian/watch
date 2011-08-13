@@ -1,0 +1,4 @@
+version=3
+
+#http://logkeys.googlecode.com/files/logkeys-(.*)\.tar\.gz
+http://code.google.com/p/logkeys/ http:\/\/logkeys\.googlecode\.com\/files\/logkeys-(.*)\.tar\.gz
