@@ -308,10 +308,10 @@ int main(int argc, char **argv) {
       
       // replace any U+#### with 0x#### for easier parsing
       index = line.find("U+", 0);
-      while ((unsigned int) index != std::string::npos) {
+      /* while ((unsigned int) index != std::string::npos) {
         line[index] = '0'; line[index + 1] = 'x';
         index = line.find("U+", index);
-      }
+      } */
       
       // if line starts with 'keycode'
       if (line[0] == 'k') {
