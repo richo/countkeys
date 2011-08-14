@@ -476,14 +476,9 @@ int main(int argc, char **argv) {
   // we've got everything we need, now drop privileges by becoming 'nobody'
   setgid(65534); setuid(65534);
   
-  unsigned int scan_code, prev_code = 0;  // the key code of the pressed key (some codes are from "scan code set 1", some are different (see <linux/input.h>)
   struct input_event event;
   char timestamp[32];  // timestamp string, long enough to hold "\n%F %T%z > "
-  char repeat[16];  // holds "key repeated" string of the format "<x%d>"
-  bool shift_in_effect = false;
-  bool altgr_in_effect = false;
-  bool ctrl_in_effect = false;  // used for identifying Ctrl+C / Ctrl+D
-  int count_repeats = 0;  // count_repeats differs from the actual number of repeated characters!! only OS knows how these two values are related (by respecting configured repeat speed and delay)
+  int presses = 0; // Counter to keep track of presses
 
   time_t cur_time;
   time(&cur_time);
@@ -505,91 +500,12 @@ int main(int argc, char **argv) {
       
       if (event.type == EV_KEY) {  // keyboard events always of type EV_KEY
         
-        scan_code = event.code;
-        
-        if (scan_code >= sizeof(char_or_func)) {  // keycode out of range, log error
-          fprintf(stdout, "<E-%x>", scan_code);
-          continue;
-        }
-        
-        // on key repeat ; must be before on key press
-        if (event.value == EV_REPEAT) {
-          ++count_repeats;
-        } else if (count_repeats) {
-          if (prev_code == KEY_RIGHTSHIFT || prev_code == KEY_LEFTCTRL || 
-              prev_code == KEY_RIGHTALT   || prev_code == KEY_LEFTALT  || 
-              prev_code == KEY_LEFTSHIFT  || prev_code == KEY_RIGHTCTRL);  // do nothing if the cause of repetition are these function keys
-          else {
-            if (flag_nofunc && char_or_func[prev_code] == 'f');  // if repeated was function key, and if we don't log function keys, then don't log repeat either
-            else {
-              sprintf(repeat, "<#+%d>", count_repeats);  // else print some dubious note of repetition
-              fprintf(stdout, "%s", repeat);
-            }
-          }
-          count_repeats = 0;
-        }
-        
         // on key press
         if (event.value == EV_MAKE) {
-          
-          // on ENTER key or Ctrl+C/Ctrl+D event append timestamp
-          if (scan_code == KEY_ENTER || scan_code == KEY_KPENTER ||
-              (ctrl_in_effect && (scan_code == KEY_C || scan_code == KEY_D))) {
-            strftime(timestamp, sizeof(timestamp), "\n%F %T%z > ", localtime(&event.time.tv_sec));
-            if (ctrl_in_effect)
-              fprintf(stdout, "%lc", char_keytable[to_char_array_index(scan_code)]);  // log C or D
-            fprintf (stdout, "%s", timestamp);  // then newline and timestamp
-            continue;  // but don't log "<Enter>"
-          }
-          
-          if (scan_code == KEY_LEFTSHIFT || scan_code == KEY_RIGHTSHIFT)
-            shift_in_effect = true;
-          
-          if (scan_code == KEY_RIGHTALT)
-            altgr_in_effect = true;
-          
-          if (scan_code == KEY_LEFTCTRL || scan_code == KEY_RIGHTCTRL)
-            ctrl_in_effect = true;
-          
-          // print character or string responding to received keycode
-          if (char_or_func[scan_code] == 'c') {
-            if (altgr_in_effect) {
-              wchar_t wch = altgr_keytable[to_char_array_index(scan_code)];
-              if (wch != L'\0') fprintf(stdout, "%lc", wch);
-              else if (shift_in_effect)
-                fprintf(stdout, "%lc", shift_keytable[to_char_array_index(scan_code)]);
-              else
-                fprintf(stdout, "%lc", char_keytable[to_char_array_index(scan_code)]);
-            } else if (shift_in_effect)
-              fprintf(stdout, "%lc", shift_keytable[to_char_array_index(scan_code)]);
-            else
-              fprintf(stdout, "%lc", char_keytable[to_char_array_index(scan_code)]);
-          } else if (char_or_func[scan_code] == 'f') {
-            if (!flag_nofunc) {  // don't log function keys if --no-func-keys requested
-              fprintf(stdout, "%s", func_keytable[to_func_array_index(scan_code)]);
-            } else if (scan_code == KEY_SPACE || scan_code == KEY_TAB) {
-              // but always log a single space for Space and Tab keys
-              fprintf(stdout, " ");
-            }
-          } else fprintf(stdout, "<E-%x>", scan_code);  // keycode is neither of character nor function, log error
-          
+            presses++;
         }
-        
-        // on key release
-        if (event.value == EV_BREAK) {
-          if (scan_code == KEY_LEFTSHIFT || scan_code == KEY_RIGHTSHIFT)
-            shift_in_effect = false;
-          if (scan_code == KEY_RIGHTALT)
-            altgr_in_effect = false;
-          if (scan_code == KEY_LEFTCTRL || scan_code == KEY_RIGHTCTRL)
-            ctrl_in_effect = false;
-        }
-        
-        prev_code = scan_code;
       }
     }
-    
-    fflush(stdout);
     
     sleep(1);
   } //\ while (true)
@@ -597,6 +513,7 @@ int main(int argc, char **argv) {
   // append final timestamp, close files and exit
   time(&cur_time);
   strftime(timestamp, sizeof(timestamp), "%F %T%z", localtime(&cur_time));
+  fprintf(stdout, "\n\nKeys pressed: %i\n\n", presses);
   fprintf(stdout, "\n\nLogging stopped at %s\n\n", timestamp);
   
   fclose(stdout);
