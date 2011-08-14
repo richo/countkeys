@@ -466,7 +466,7 @@ int main(int argc, char **argv) {
   }
   
   // open log file as stdout (if file doesn't exist, create it with safe 0600 permissions)
-  umask(0177);
+  //umask(0177); FIXME
   stdout = freopen(log_filename, "a", stdout);
   if (stdout == NULL) {
     fprintf(stderr, "%s: Error opening output file '%s': %s\n", argv[0], log_filename, strerror(errno));
