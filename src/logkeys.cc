@@ -77,67 +77,8 @@ void signal_handler(int interrupt) {
   flag_kill = true;
 }
 
-// translates character keycodes to continuous array indices
-inline int to_char_array_index(int keycode) {
-  if (keycode >= KEY_1 && keycode <= KEY_EQUAL)  // keycodes 2-13: US keyboard: 1, 2, ..., 0, -, =
-    return keycode - 2;
-  if (keycode >= KEY_Q && keycode <= KEY_RIGHTBRACE)  // keycodes 16-27: q, w, ..., [, ]
-    return keycode - 4;
-  if (keycode >= KEY_A && keycode <= KEY_GRAVE)  // keycodes 30-41: a, s, ..., ', `
-    return keycode - 6;
-  if (keycode >= KEY_BACKSLASH && keycode <= KEY_SLASH)  // keycodes 43-53: \, z, ..., ., /
-    return keycode - 7;
-  
-  if (keycode == KEY_102ND) return 47;
-  
-  return -1;  // not character keycode
-}
-
-// translates function keys keycodes to continuous array indices
-inline int to_func_array_index(int keycode) {
-  if (keycode == KEY_ESC)  // 1
-    return 0;
-  if (keycode >= KEY_BACKSPACE && keycode <= KEY_TAB)  // 14-15
-    return keycode - 13;
-  if (keycode >= KEY_ENTER && keycode <= KEY_LEFTCTRL)  // 28-29
-    return keycode - 25;
-  if (keycode == KEY_LEFTSHIFT) return keycode - 37;  // 42
-  if (keycode >= KEY_RIGHTSHIFT && keycode <= KEY_KPDOT)  // 54-83
-    return keycode - 48;
-  if (keycode >= KEY_F11 && keycode <= KEY_F12)  // 87-88
-    return keycode - 51;
-  if (keycode >= KEY_KPENTER && keycode <= KEY_DELETE)  // 96-111
-    return keycode - 58;
-  if (keycode == KEY_PAUSE)  // 119
-    return keycode - 65;
-  if (keycode >= KEY_LEFTMETA && keycode <= KEY_COMPOSE)  // 125-127
-    return keycode - 70;
-  
-  return -1;  // not function key keycode
-}
-
 int main(int argc, char **argv) {
   
-  char func_keytable[][8] = {
-    "<Esc>", "<BckSp>", "<Tab>", "<Enter>", "<LCtrl>", "<LShft>", "<RShft>", "<KP*>", "<LAlt>", " ", "<CpsLk>", "<F1>", "<F2>", "<F3>", "<F4>", "<F5>",
-    "<F6>", "<F7>", "<F8>", "<F9>", "<F10>", "<NumLk>", "<ScrLk>", "<KP7>", "<KP8>", "<KP9>", "<KP->", "<KP4>", "<KP5>", "<KP6>", "<KP+>", "<KP1>",
-    "<KP2>", "<KP3>", "<KP0>", "<KP.>", /*"<",*/ "<F11>", "<F12>", "<KPEnt>", "<RCtrl>", "<KP/>", "<PrtSc>", "<AltGr>", "<Break>" /*linefeed?*/, "<Home>", "<Up>", "<PgUp>", 
-    "<Left>", "<Right>", "<End>", "<Down>", "<PgDn>", "<Ins>", "<Del>", "<Pause>", "<LMeta>", "<RMeta>", "<Menu>"
-  };
-  
-  wchar_t char_keytable[49] =  L"1234567890-=qwertyuiop[]asdfghjkl;'`\\zxcvbnm,./<";
-  wchar_t shift_keytable[49] = L"!@#$%^&*()_+QWERTYUIOP{}ASDFGHJKL:\"~|ZXCVBNM<>?>";
-  wchar_t altgr_keytable[49] = {0}; // old, US don't use AltGr key: L"\0@\0$\0\0{[]}\\\0qwertyuiop\0~asdfghjkl\0\0\0\0zxcvbnm\0\0\0|";  // \0 on no symbol; as obtained by `loadkeys us`
-  
-  const char char_or_func[] =  // c means character key, f means function key, _ is blank/error (_ used, don't change); all according to KEY_* defines from <linux/input.h>
-    "_fccccccccccccff"
-    "ccccccccccccffcc"
-    "ccccccccccfccccc"
-    "ccccccffffffffff"
-    "ffffffffffffffff"
-    "ffff__cff_______"
-    "ffffffffffffffff"
-    "_______f_____fff";
   
   if (geteuid()) { fprintf(stderr, "Got r00t?\n"); return EXIT_FAILURE; }
   
@@ -152,7 +93,6 @@ int main(int argc, char **argv) {
   
   char *log_filename = (char*) DEFAULT_LOG_FILE;  // default log file
   char log_file_path[512]; // don't use paths longer than 512 B !!
-  char *keymap_filename = NULL;  // path to keymap file to be used
   char *device_filename = NULL;  // path to input event device if given with -d switch
 
   { // process options and arguments
@@ -180,8 +120,6 @@ int main(int argc, char **argv) {
         case 'd': device_filename = optarg;                     break;
         
         case  0 : 
-          if (option_index == EXPORT_KEYMAP_INDEX)
-            keymap_filename = optarg; 
           break;  // + flag_export or flag_nofunc already set
         
         case '?': usage(); return EXIT_SUCCESS;
@@ -230,159 +168,6 @@ int main(int argc, char **argv) {
     setlocale(LC_CTYPE, "");  // try the locale that corresponds to the value of the associated environment variables, LC_CTYPE and LANG
   // else just leave the burden of possible Fail to the user, without any warning :D
   
-  // read keymap from file
-  if (flag_start && flag_keymap && !flag_export) {
-    
-    // custom map will be used; erase existing US keymapping
-    memset(char_keytable,  '\0', sizeof(char_keytable));
-    memset(shift_keytable, '\0', sizeof(shift_keytable));
-    memset(altgr_keytable, '\0', sizeof(altgr_keytable));
-    
-    stdin = freopen(keymap_filename, "r", stdin);
-    unsigned int i = 0;
-    unsigned int line_number = 0;
-    int index;
-    char func_string[32];
-    char line[32];
-    
-    while (!feof(stdin)) {
-      
-      if (i >= sizeof(char_or_func)) break;  // only read up to 128 keycode bindings (currently 105:)
-      
-      if (char_or_func[i] != '_') {
-        if(fgets(line, sizeof(line), stdin));  // wrapped in if() to avoid compiler warning; handle errors later
-        ++line_number;
-      }
-      
-      if (char_or_func[i] == 'c') {
-        
-        index = to_char_array_index(i);
-        if (sscanf(line, "%lc %lc %lc\n", &char_keytable[index], &shift_keytable[index], &altgr_keytable[index]) < 2) {
-          fprintf(stderr, "%s: Error parsing keymap '%s' on line %d: %s\n", argv[0], keymap_filename, line_number, line);
-          return EXIT_FAILURE;
-        }
-      }
-      if (char_or_func[i] == 'f') {
-
-        if (i != KEY_SPACE) {  // space causes empty string and trouble
-          if (sscanf(line, "%s\n", &func_string[0]) != 1 || strlen(func_string) > 7) {
-            fprintf(stderr, "%s: Error parsing keymap '%s' on line %d: %s\n", argv[0], keymap_filename, line_number, line);
-            return EXIT_FAILURE;
-          }
-          strcpy(func_keytable[to_func_array_index(i)], func_string);
-        }
-      }
-      ++i;
-    } //\ while (!feof(stdin))
-    fclose(stdin);
-  
-  // get keymap used by the system and optionally export it to file
-  } else if ((flag_start && !flag_us_keymap) || flag_export) {
-    
-    // custom map will be used; erase existing US keymapping
-    memset(char_keytable,  '\0', sizeof(char_keytable));
-    memset(shift_keytable, '\0', sizeof(shift_keytable));
-    memset(altgr_keytable, '\0', sizeof(altgr_keytable));
-    
-    // get keymap from dumpkeys
-    // if one knows of a better, more portable way to get wchar_t-s from symbolic keysym-s from `dumpkeys` or `xmodmap` or another, PLEASE LET ME KNOW! kthx
-    std::stringstream ss, dump(exec("dumpkeys -n | grep '^\\([[:space:]]shift[[:space:]]\\)*\\([[:space:]]altgr[[:space:]]\\)*keycode'"));  // see example output after i.e. `loadkeys slovene`
-    // above was "dumpkeys -n | grep -P '^keycode|^\tshift\tkeycode|^\taltgr\tkeycode'", but grep is more portable without -P switch
-    std::string line;
-
-    unsigned int keycode = 0;   // keycode
-    int index;
-    int utf8code;      // utf-8 code of keysym answering keycode
-    
-    while (std::getline(dump, line)) {
-      ss.clear();
-      ss.str("");
-      utf8code = 0;
-      
-      // replace any U+#### with 0x#### for easier parsing
-      index = line.find("U+", 0);
-      /* while ((unsigned int) index != std::string::npos) {
-        line[index] = '0'; line[index + 1] = 'x';
-        index = line.find("U+", index);
-      } */
-      
-      // if line starts with 'keycode'
-      if (line[0] == 'k') {
-        ++keycode;
-        
-        if (keycode >= sizeof(char_or_func)) break;  // only ever map keycodes up to 128
-        
-        if (char_or_func[keycode] == 'c') {
-          
-          index = to_char_array_index(keycode);  // only map character keys of keyboard
-          
-          ss << &line[14];  // 1st keysym starts at index 14 (skip "keycode XXX = ")
-          ss >> std::hex >> utf8code;
-          // 0XB00CLUELESS: 0xb00 is added to some keysyms that are preceeded with '+'; i don't really know why; see `man keymaps`; `man loadkeys` says numeric keysym values aren't to be relied on, orly?
-          if (line[14] == '+' && (utf8code & 0xB00)) utf8code ^= 0xB00; 
-          char_keytable[index] = static_cast<wchar_t>(utf8code);
-          
-          // if there is a second keysym column, assume it is a shift column
-          if (ss >> std::hex >> utf8code) {
-            if (line[14] == '+' && (utf8code & 0xB00)) utf8code ^= 0xB00;
-            shift_keytable[index] = static_cast<wchar_t>(utf8code);
-          }
-          
-          // if there is a third keysym column, assume it is an altgr column
-          if (ss >> std::hex >> utf8code) {
-            if (line[14] == '+' && (utf8code & 0xB00)) utf8code ^= 0xB00;
-            //utf8code = utf8code & 0xFF00 ? 0 : utf8code;  // commented: just use w/e value we get
-            altgr_keytable[index] = static_cast<wchar_t>(utf8code);
-          }
-        } //\ if (char_or_func[keycode] == 'c')
-        continue;
-      } //\ if (line[0] == 'k')
-      
-      index = to_char_array_index(keycode);
-      
-      // if line starts with 'shift keycode'
-      if (char_or_func[keycode] == 'c' && line[1] == 's') {
-        ss << &line[21];  // 1st keysym starts at index 21 (skip "\tshift\tkeycode XXX = ")
-        ss >> std::hex >> utf8code;
-        if (line[21] == '+' && (utf8code & 0xB00)) utf8code ^= 0xB00;  // see line 0XB00CLUELESS
-        shift_keytable[index] = static_cast<wchar_t>(utf8code);
-      }
-      
-      // if line starts with 'altgr keycode'
-      if (char_or_func[keycode] == 'c' && line[1] == 'a') {
-        ss << &line[21];  // 1st keysym starts at index 21 (skip "\taltgr\tkeycode XXX = ")
-        ss >> std::hex >> utf8code;
-        if (line[21] == '+' && (utf8code & 0xB00)) utf8code ^= 0xB00;  // see line 0XB00CLUELESS
-        //utf8code = utf8code & 0xFF00 ? 0 : utf8code;  // commented: just use w/e value we get
-        altgr_keytable[index] = static_cast<wchar_t>(utf8code);
-      }
-      
-    } //\ while (getline(dump, line))
-    
-    // export keymap to file as requested
-    if (flag_export) {
-      stdout = freopen(keymap_filename, "w", stdout);
-      if (stdout == NULL) {
-        fprintf(stderr, "%s: Error opening keymap output file '%s': %s\n", argv[0], keymap_filename, strerror(errno));
-        return EXIT_FAILURE;
-      }
-      
-      for (unsigned int i = 0; i < sizeof(char_or_func); ++i) {
-        if (char_or_func[i] == 'c') {
-          index = to_char_array_index(i);
-          fprintf(stdout, "%lc %lc", char_keytable[index], shift_keytable[index]);
-          if (altgr_keytable[index] != L'\0')
-            fprintf(stdout, " %lc\n", altgr_keytable[index]);
-          else fprintf(stdout, "\n");
-        } else if (char_or_func[i] == 'f') {
-          fprintf(stdout, "%s\n", func_keytable[to_func_array_index(i)]);
-        }
-      }
-      fprintf(stderr, "%s: Written keymap to file '%s'\n", argv[0], keymap_filename);
-      fclose(stdout);
-      return EXIT_SUCCESS;
-    } //\ if (flag_export)
-  }
   
 #ifndef INPUT_EVENT_DEVICE  // sometimes X in /dev/input/eventX is different from one reboot to another
   
