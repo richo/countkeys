@@ -42,16 +42,13 @@ void usage() {
 "Log depressed keyboard keys.\n"
 "\n"
 "  -s, --start               start logging keypresses\n"
-"  -m, --keymap=FILE         use keymap FILE\n"
 "  -o, --output=FILE         log output to FILE [" DEFAULT_LOG_FILE "]\n"
-"  -u, --us-keymap           use en_US keymap instead of configured default\n"
 "  -k, --kill                kill running logkeys process\n"
 "  -d, --device=FILE         input event device [" INPUT_EVENT_PATH "X]\n"
 "  -?, --help                print this help\n"
-"      --export-keymap=FILE  export configured keymap to FILE and exit\n"
 "      --no-func-keys        don't log function keys, only character keys\n"
 "\n"
-"Examples: logkeys -s -m mylang.map -o ~/.secret/keys.log\n"
+"Examples: logkeys -s -o ~/.secret/keys.log\n"
 "          logkeys -s -d /dev/input/event6\n"
 "          logkeys -k\n"
 "\n"
@@ -162,9 +159,7 @@ int main(int argc, char **argv) {
     
     struct option long_options[] = {
       {"start",     no_argument,       0, 's'},
-      {"keymap",    required_argument, 0, 'm'},
       {"output",    required_argument, 0, 'o'},
-      {"us-keymap", no_argument,       0, 'u'},
       {"kill",      no_argument,       0, 'k'},
       {"device",    required_argument, 0, 'd'},
       {"help",      no_argument,       0, '?'},
@@ -180,9 +175,7 @@ int main(int argc, char **argv) {
     while ((c = getopt_long(argc, argv, "sm:o:ukd:?", long_options, &option_index)) != -1)
       switch (c) {
         case 's': flag_start = true;                            break;
-        case 'm': flag_keymap = true; keymap_filename = optarg; break;
         case 'o': log_filename = optarg;                        break;
-        case 'u': flag_us_keymap = true;                        break;
         case 'k': flag_kill = true;                             break;
         case 'd': device_filename = optarg;                     break;
         
