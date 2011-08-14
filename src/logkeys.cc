@@ -1,9 +1,12 @@
 /*
+  Copyleft 2011 richo
   Copyleft (ɔ) 2009 Kernc
   This program is free software. It comes with absolutely no warranty whatsoever.
   See COPYING for further information.
+
+  This project was forked from Kernc's logkeys
   
-  Project homepage: http://code.google.com/p/logkeys/
+  Project homepage: https://github.com/richoH/countkeys
 */
 
 #include <cstdio>
@@ -53,7 +56,7 @@ void usage() {
 "          logkeys -k\n"
 "\n"
 "logkeys version: " PACKAGE_VERSION "\n"
-"logkeys homepage: <http://code.google.com/p/logkeys/>\n"
+"logkeys homepage: <https://github.com/richoH/countkeys>\n"
   );
 }
 
