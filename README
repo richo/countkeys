@@ -22,12 +22,10 @@ licensing information.
 +------------------------------------------------
  1. Description
 ===============================================================================
-logkeys is a linux keylogger. It is no more advanced than other available linux
-keyloggers, notably lkl and uberkey, but is a bit newer, more up to date, it
-doesn't unreliably repeat keys and it shouldn't crash your X. All in all, it
-just seems to work. It relies on event interface of the Linux input subsystem. 
-Once completely set, it logs all common character and function keys, while also
-being fully aware of Shift and AltGr key modifiers.
+countkeys is a linux keystroke counter. It simply (and I mean simply- it
+doesn't do anything too bright as far as working out what a keyboard looks
+like) keeps track of how many keys you press in a session and then lets you
+know
 
 
 +------------------------------------------------
