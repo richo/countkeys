@@ -114,7 +114,7 @@ int main(int argc, char **argv) {
         case 's': flag_start = true;                            break;
         case 'o': log_filename = optarg;                        break;
         case 'k': flag_kill = true;                             break;
-        case 'r': flag_foreground = true;                             break;
+        case 'f': flag_foreground = true;                       break;
         case 'd': device_filename = optarg;                     break;
         
         case  0 : 
