@@ -1,17 +1,17 @@
-.TH logkeys 8 2009-12-13
+.TH countkeys 8 2009-12-13
 .SH NAME
-logkeys \- a GNU/Linux keylogger that works!
+countkeys \- a GNU/Linux keylogger that works!
 .SH SYNOPSIS
-.B logkeys
+.B countkeys
 \fB-s\fR [\fB-m \fIkeymap\fR|\fB-u\fR] [\fB-o \fIlogfile\fR] [\fB-d \fIdevice\fR] [\fB--no-func-keys\fR]
 .br
-.B logkeys
+.B countkeys
 \fB-k\fR
 .br
-.B logkeys
+.B countkeys
 [\fB--export-keymap=\fIkeymap\fR]
 .SH DESCRIPTION
-logkeys is a linux keylogger. It is no more advanced than other available linux
+countkeys is a linux keylogger. It is no more advanced than other available linux
 keyloggers, notably \fBlkl\fR and \fBuberkey\fR, but is a bit newer, more up to date, it
 doesn't unreliably repeat keys and it shouldn't crash your X. All in all, it
 just seems to work. It relies on the event interface of Linux input subsystem 
@@ -31,11 +31,11 @@ Non-optional arguments are required for short options too.
 Starts the keylogging daemon process.
 .TP
 \fB-k\fR, \fB-\-kill\fR
-Terminates the running logkeys process.
+Terminates the running countkeys process.
 .TP
 \fB-o\fR, \fB-\-output\fR=\fIlogfile\fR
-Set ouput log file to \fIlogfile\fR. If no \fB-o\fR option is provided, logkeys
-appends to \fI/var/log/logkeys.log\fR file. If \fIlogfile\fR doesn't exist, logkeys
+Set ouput log file to \fIlogfile\fR. If no \fB-o\fR option is provided, countkeys
+appends to \fI/var/log/countkeys.log\fR file. If \fIlogfile\fR doesn't exist, countkeys
 creates the file with 600 permissions.
 .IP
 See also \fBLOGFILE FORMAT\fR section.
@@ -56,12 +56,12 @@ Use \fIdevice\fR as keyboard input event device instead of \fI/dev/input/eventX\
 You can determine the keyboard device to be used by examining \fI/proc/bus/input/devices\fR.
 .TP
 \fB-u\fR, \fB-\-us-keymap\fR
-This option makes logkeys interpret keys as on standard US keyboard.
+This option makes countkeys interpret keys as on standard US keyboard.
 .IP
 \fB-u\fR and \fB-m\fR option are mutually exclusive.
 .TP
 \fB-\-export-keymap\fR=\fIkeymap\fR
-This option makes logkeys export dynamic keymap as obtained from \fIdumpkeys\fR(1)
+This option makes countkeys export dynamic keymap as obtained from \fIdumpkeys\fR(1)
 to file \fIkeymap\fR and then exit.
 .IP
 \fIkeymap\fR can later be used with \fB-m\fR option to override automatic keymap 
@@ -74,7 +74,7 @@ on a virtual terminal outside of X (\fI/dev/ttyX\fR).
 See section \fBKEYMAP FORMAT\fR for exported keymap format.
 .TP
 \fB-\-no-func-keys\fR
-This option makes logkeys log all and only character key presses 
+This option makes countkeys log all and only character key presses 
 (1, 2, ..., q, w, e, ..., a, s, d, f, ..., ", @, \\, ...).
 .IP
 This option may be useful when correct \fIkeymap\fR can reliably be 
@@ -82,8 +82,8 @@ expected (i.e. by providing it with \fB-m\fR option). Then only character keys a
 logged, influenced by Shift and AltGr modifiers.
 .SH FILES
 .TP
-\fB/var/log/logkeys.log\fR
-When \fB-o\fR option is not used, logkeys appends to default log file.
+\fB/var/log/countkeys.log\fR
+When \fB-o\fR option is not used, countkeys appends to default log file.
 .SH "LOGFILE FORMAT"
 Log files are \fBUTF-8 encoded\fR.
 .PP
@@ -125,7 +125,7 @@ Logging started ...
 .IP
 Logging stopped at 2009-12-11 09:58:54+0100
 .PP
-If the same log was obtained by a logkeys process invoked with \fB-\-no-func-keys\fR
+If the same log was obtained by a countkeys process invoked with \fB-\-no-func-keys\fR
 option, it would look like:
 .IP
 Logging started ...
@@ -188,42 +188,42 @@ please upload it to project website or send it to me by e-mail. Thanks.
 .SH EXAMPLES
 To print short help:
 .IP
-$ logkeys
+$ countkeys
 .PP
 To start logging to a custom log file with dynamically generated keymap:
 .IP
-$ logkeys --start --output /home/user/.secret/log
+$ countkeys --start --output /home/user/.secret/log
 .PP
 To start logging to default log file on a standard US keyboard:
 .IP
-$ logkeys --start --us-keymap
+$ countkeys --start --us-keymap
 .PP
 To export dynamically generated keymap to file:
 .IP
-$ logkeys --export-keymap my_keymap
+$ countkeys --export-keymap my_keymap
 .PP
 To start logging to default log file with a custom keymap:
 .IP
-$ logkeys --start --keymap my_keymap
+$ countkeys --start --keymap my_keymap
 .PP
-To end running logkeys process:
+To end running countkeys process:
 .IP
-$ logkeys --kill
+$ countkeys --kill
 .PP
 After updated to one's liking, helper scripts \fI/usr/bin/lkl\fR (start) and 
 \fI/usr/bin/lklk\fR (kill) can be used as well.
 .SH BUGS
-logkeys relies on numeric output of \fIdumpkeys\fR(1), which \fIkeymaps\fR(5)
+countkeys relies on numeric output of \fIdumpkeys\fR(1), which \fIkeymaps\fR(5)
 manual page specifically discourages as unportable.
 .PP
 Be nice and hope nothing breaks.
 .PP
 If you come across any bugs, please report them on project website, issues page:
 .IP
-http://code.google.com/p/logkeys/issues
+http://code.google.com/p/countkeys/issues
 .SH AUTHOR
 .PP
-logkeys was written by Kernc <kerncece+logkeys@gmail.com>.
+countkeys was written by Kernc <kerncece+countkeys@gmail.com>.
 .PP
 You can always obtain the latest version and information at project website:
-<http://code.google.com/p/logkeys/>.
+<http://code.google.com/p/countkeys/>.

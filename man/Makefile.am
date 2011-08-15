@@ -1,1 +1,1 @@
-man_MANS = logkeys.8
+man_MANS = countkeys.8

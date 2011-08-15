@@ -1,26 +1,26 @@
-Index: logkeys-0.1.0/src/Makefile.am
+Index: countkeys-0.1.0/src/Makefile.am
 ===================================================================
---- logkeys-0.1.0.orig/src/Makefile.am	2010-02-07 04:32:30.368537733 +0100
-+++ logkeys-0.1.0/src/Makefile.am	2010-02-07 04:32:36.824621832 +0100
+--- countkeys-0.1.0.orig/src/Makefile.am	2010-02-07 04:32:30.368537733 +0100
++++ countkeys-0.1.0/src/Makefile.am	2010-02-07 04:32:36.824621832 +0100
 @@ -2,7 +2,3 @@
  
- bin_PROGRAMS = logkeys
- logkeys_SOURCES = logkeys.cc
+ bin_PROGRAMS = countkeys
+ countkeys_SOURCES = countkeys.cc
 -
 -install-exec-hook:
--	chown root $(bindir)/logkeys
--	chmod u+s $(bindir)/logkeys
-Index: logkeys-0.1.0/src/Makefile.in
+-	chown root $(bindir)/countkeys
+-	chmod u+s $(bindir)/countkeys
+Index: countkeys-0.1.0/src/Makefile.in
 ===================================================================
---- logkeys-0.1.0.orig/src/Makefile.in	2010-02-07 04:32:18.345040326 +0100
-+++ logkeys-0.1.0/src/Makefile.in	2010-02-07 04:32:24.253626912 +0100
+--- countkeys-0.1.0.orig/src/Makefile.in	2010-02-07 04:32:18.345040326 +0100
++++ countkeys-0.1.0/src/Makefile.in	2010-02-07 04:32:24.253626912 +0100
 @@ -449,10 +449,6 @@
  	tags uninstall uninstall-am uninstall-binPROGRAMS
  
  
 -install-exec-hook:
--	chown root $(bindir)/logkeys
--	chmod u+s $(bindir)/logkeys
+-	chown root $(bindir)/countkeys
+-	chmod u+s $(bindir)/countkeys
 -
  # Tell versions [3.59,3.63) of GNU make to not export all variables.
  # Otherwise a system limit (for SysV at least) may be exceeded.

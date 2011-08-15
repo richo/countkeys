@@ -1,13 +1,13 @@
-Source: logkeys
+Source: countkeys
 Section: admin
 Priority: optional
 Maintainer: Vedran Furač <vedran.furac@gmail.com>
 Build-Depends: cdbs, debhelper (>= 7), autotools-dev, quilt, console-tools,
                 procps
 Standards-Version: 3.8.4
-Homepage: http://code.google.com/p/logkeys/
+Homepage: http://code.google.com/p/countkeys/
 
-Package: logkeys
+Package: countkeys
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}
 Description: a keylogger for GNU/Linux systems

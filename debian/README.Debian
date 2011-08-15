@@ -1,8 +1,8 @@
-logkeys for Debian
+countkeys for Debian
 ------------------
 
 Logkeys is disabled by default. Before using it you will need to set
-DEVICE variable in /etc/default/logkeys. Check /proc/bus/input/devices,
+DEVICE variable in /etc/default/countkeys. Check /proc/bus/input/devices,
 for your keyboard and find line that looks like:
 
 H: Handlers=kbd eventXX

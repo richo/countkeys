@@ -1,13 +1,13 @@
 ===============================================================================
- logkeys keylogger - instalation instructions
+ countkeys keylogger - instalation instructions
 ===============================================================================
 
-Provided your GNU/Linux distribution doesn't include logkeys package in its
-repositories, manual installation of logkeys from source is as easy as:
+Provided your GNU/Linux distribution doesn't include countkeys package in its
+repositories, manual installation of countkeys from source is as easy as:
 
- $ tar xvzf logkeys-0.1.0.tar.gz   # to extract the logkeys archive
+ $ tar xvzf countkeys-0.1.0.tar.gz   # to extract the countkeys archive
  
- $ cd logkeys-0.1.0/build  # move to build directory to build there
+ $ cd countkeys-0.1.0/build  # move to build directory to build there
  $ ../configure            # invoke configure from parent directory
  $ make                    # make compiles what it needs to compile
  ( become superuser now )  # you need root to install in system dir
@@ -27,12 +27,12 @@ Along with other standard configure options, you can also use:
 
  $ ../configure --enable-evdev-path=PATH
 
-to have logkeys look for input event devices in PATH ( $(PATH)/eventX ) instead
+to have countkeys look for input event devices in PATH ( $(PATH)/eventX ) instead
 of preconfigured default /dev/input (/dev/input/eventX), and
 
  $ ../configure --enable-evdev=DEV
 
-to have logkeys define static event device DEV (i.e. /dev/input/eventX) instead
+to have countkeys define static event device DEV (i.e. /dev/input/eventX) instead
 of looking for it in default /dev/input path or custom evdev-path.
 
 The input event device we are referring to, here, is the kernel event interface

@@ -2,8 +2,8 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ(2.64)
-AC_INIT([logkeys],[0.1.0],[kerncece+logkeys@gmail.com],[],[http://code.google.com/p/logkeys/])
-AC_CONFIG_SRCDIR([src/logkeys.cc])
+AC_INIT([countkeys],[0.1.0],[kerncece+countkeys@gmail.com],[],[http://code.google.com/p/countkeys/])
+AC_CONFIG_SRCDIR([src/countkeys.cc])
 AM_INIT_AUTOMAKE([-Wall foreign])
 AC_CONFIG_HEADERS([config.h])
 

@@ -1,4 +1,4 @@
 -> Add support for running in the foreground to log a given session
 
 -> Email upstream to see what we can work out RE codebase unification
---> Understandably, I wouldn't want the logkeys binaries installed /anywhere/
+--> Understandably, I wouldn't want the countkeys binaries installed /anywhere/

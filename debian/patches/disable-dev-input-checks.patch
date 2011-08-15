@@ -1,7 +1,7 @@
-Index: logkeys-0.1.0/configure
+Index: countkeys-0.1.0/configure
 ===================================================================
---- logkeys-0.1.0.orig/configure	2010-02-07 15:36:20.645183394 +0100
-+++ logkeys-0.1.0/configure	2010-02-07 15:36:40.781190131 +0100
+--- countkeys-0.1.0.orig/configure	2010-02-07 15:36:20.645183394 +0100
++++ countkeys-0.1.0/configure	2010-02-07 15:36:40.781190131 +0100
 @@ -3565,7 +3565,7 @@
  if test -r "/dev/input"; then
    ac_cv_file__dev_input=yes

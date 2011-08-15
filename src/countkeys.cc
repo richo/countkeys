@@ -4,7 +4,7 @@
   This program is free software. It comes with absolutely no warranty whatsoever.
   See COPYING for further information.
 
-  This project was forked from Kernc's logkeys
+  This project was forked from Kernc's countkeys
   
   Project homepage: https://github.com/richoH/countkeys
 */
@@ -22,8 +22,8 @@
 
 #include <config.h>  // config produced from ./configure
 
-#define DEFAULT_LOG_FILE "/var/log/logkeys.log"
-#define TMP_PID_FILE     "/var/run/logkeys.pid.lock"
+#define DEFAULT_LOG_FILE "/var/log/countkeys.log"
+#define TMP_PID_FILE     "/var/run/countkeys.pid.lock"
 
 #ifdef INPUT_EVENT_PREFIX  // may be defined by ./configure --enable-evdev-path=PATH
 # define INPUT_EVENT_PATH (INPUT_EVENT_PREFIX "/event")  // in which case use it
@@ -38,22 +38,22 @@
 
 void usage() {
   fprintf(stderr,
-"Usage: logkeys [OPTION]...\n"
+"Usage: countkeys [OPTION]...\n"
 "Log depressed keyboard keys.\n"
 "\n"
 "  -s, --start               start logging keypresses\n"
 "  -o, --output=FILE         log output to FILE [" DEFAULT_LOG_FILE "]\n"
-"  -k, --kill                kill running logkeys process\n"
+"  -k, --kill                kill running countkeys process\n"
 "  -d, --device=FILE         input event device [" INPUT_EVENT_PATH "X]\n"
 "  -?, --help                print this help\n"
 "      --no-func-keys        don't log function keys, only character keys\n"
 "\n"
-"Examples: logkeys -s -o ~/.secret/keys.log\n"
-"          logkeys -s -d /dev/input/event6\n"
-"          logkeys -k\n"
+"Examples: countkeys -s -o ~/.secret/keys.log\n"
+"          countkeys -s -d /dev/input/event6\n"
+"          countkeys -k\n"
 "\n"
-"logkeys version: " PACKAGE_VERSION "\n"
-"logkeys homepage: <https://github.com/richoH/countkeys>\n"
+"countkeys version: " PACKAGE_VERSION "\n"
+"countkeys homepage: <https://github.com/richoH/countkeys>\n"
   );
 }
 
@@ -71,7 +71,7 @@ std::string exec(const char* cmd) {
     return result;
 }
 
-bool flag_kill = false;  // kill any running logkeys process
+bool flag_kill = false;  // kill any running countkeys process
 
 void signal_handler(int interrupt) {
   flag_kill = true;
@@ -130,12 +130,12 @@ int main(int argc, char **argv) {
       fprintf(stderr, "%s: Non-option argument %s\n", argv[0], argv[optind++]);
   } //\ arguments
   
-  // kill existing logkeys process
+  // kill existing countkeys process
   if (flag_kill) {
     FILE *temp_file = fopen(TMP_PID_FILE, "r");
     pid_t pid;
     if ((temp_file != NULL && fscanf(temp_file, "%d", &pid) == 1 && fclose(temp_file) == 0) || 
-        (sscanf( exec("pgrep logkeys").c_str(), "%d", &pid) == 1 && pid != getpid())) { // if reading PID from temp_file failed, try pgrep pipe
+        (sscanf( exec("pgrep countkeys").c_str(), "%d", &pid) == 1 && pid != getpid())) { // if reading PID from temp_file failed, try pgrep pipe
       remove(TMP_PID_FILE);
       kill(pid, SIGINT);
       return EXIT_SUCCESS;
@@ -238,7 +238,7 @@ int main(int argc, char **argv) {
     if (write(temp_fd, pid_str, strlen(pid_str)) == -1) {
       fprintf(stderr, "%s: Error writing to temporary file '" TMP_PID_FILE "': %s\n", argv[0], strerror(errno));
     }
-  } else {  // another logkeys process is already running, therefore terminate this one
+  } else {  // another countkeys process is already running, therefore terminate this one
     fprintf(stderr, "%s: Another process already running. Quitting.\n", argv[0]);
     return EXIT_FAILURE;
   } //\ temp file

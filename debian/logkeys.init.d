@@ -1,25 +1,25 @@
 #! /bin/sh
 ### BEGIN INIT INFO
-# Provides:          logkeys
+# Provides:          countkeys
 # Required-Start:    $remote_fs
 # Required-Stop:     $remote_fs
 # Default-Start:     2 3 4 5
 # Default-Stop:      0 1 6
-# Short-Description: Start the logkeys keylogger.
+# Short-Description: Start the countkeys keylogger.
 ### END INIT INFO
 
 
 PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
-DAEMON=/usr/bin/logkeys
+DAEMON=/usr/bin/countkeys
 DAEMON_OPTS=""
-NAME=logkeys
-DESC=logkeys
+NAME=countkeys
+DESC=countkeys
 
 test -x $DAEMON || exit 0
 
-# Include logkeys defaults if available
-if [ -f /etc/default/logkeys ] ; then
-	. /etc/default/logkeys
+# Include countkeys defaults if available
+if [ -f /etc/default/countkeys ] ; then
+	. /etc/default/countkeys
 fi
 
 # Quit quietly, if $ENABLED is 0.
