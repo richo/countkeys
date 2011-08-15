@@ -140,9 +140,9 @@ int main(int argc, char **argv) {
     }
     fprintf(stderr, "%s: No process killed.\n", argv[0]);
     return EXIT_FAILURE;
-  } else if (!flag_start && !flag_export) { usage(); return EXIT_FAILURE; }
   
   
+  } else if (!flag_foreground && !flag_start) { usage(); return EXIT_FAILURE; }
   // if user provided a relative path to output file :/ stupid user :/
   if (log_filename[0] != '/') {
     if (getcwd(log_file_path, sizeof(log_file_path) - strlen(log_filename) - 2 /* '/' and '\0' */) == NULL) {
@@ -246,10 +246,12 @@ int main(int argc, char **argv) {
   
   // open log file as stdout (if file doesn't exist, create it with safe 0600 permissions)
   //umask(0177); FIXME
-  stdout = freopen(log_filename, "a", stdout);
-  if (stdout == NULL) {
-    fprintf(stderr, "%s: Error opening output file '%s': %s\n", argv[0], log_filename, strerror(errno));
-    return EXIT_FAILURE;
+  if (!flag_foreground) {
+      stdout = freopen(log_filename, "a", stdout);
+      if (stdout == NULL) {
+        fprintf(stderr, "%s: Error opening output file '%s': %s\n", argv[0], log_filename, strerror(errno));
+        return EXIT_FAILURE;
+      }
   }
   
   // we've got everything we need, now drop privileges by becoming 'nobody'
