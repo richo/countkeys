@@ -88,10 +88,6 @@ int main(int argc, char **argv) {
   bool flag_start = false;   // start logger
   bool flag_foreground = false;   // start logger
   // bool flag_kill; is defined global for signal_handler to access it
-  bool flag_us_keymap = false;  // use default us keymap if dynamic keymap unavailable
-  bool flag_keymap = false;  // use keymap specified by keymap_filename
-  int flag_export = 0;  // export dynamically created keymap
-  int flag_nofunc = 0;  // only log character keys (e.g. 'c', '2', 'O', etc.) and don't log function keys (e.g. <LShift>, etc.)
   
   char *log_filename = (char*) DEFAULT_LOG_FILE;  // default log file
   char log_file_path[512]; // don't use paths longer than 512 B !!
@@ -107,8 +103,6 @@ int main(int argc, char **argv) {
       {"device",    required_argument, 0, 'd'},
       {"help",      no_argument,       0, '?'},
 #define EXPORT_KEYMAP_INDEX 7
-      {"export-keymap", required_argument, &flag_export, 1},  // option_index is 7
-      {"no-func-keys",  no_argument,       &flag_nofunc, 1},
       {0, 0, 0, 0}
     };
     
@@ -148,12 +142,6 @@ int main(int argc, char **argv) {
     return EXIT_FAILURE;
   } else if (!flag_start && !flag_export) { usage(); return EXIT_FAILURE; }
   
-  // check for incompatible flags
-  if (flag_keymap && flag_us_keymap) {
-    fprintf(stderr, "%s: Incompatible flags '-m' and '-u'", argv[0]);
-    usage();
-    return EXIT_FAILURE;
-  }
   
   // if user provided a relative path to output file :/ stupid user :/
   if (log_filename[0] != '/') {
