@@ -44,6 +44,7 @@ void usage() {
 "  -s, --start               start logging keypresses\n"
 "  -o, --output=FILE         log output to FILE [" DEFAULT_LOG_FILE "]\n"
 "  -k, --kill                kill running countkeys process\n"
+"  -f, --foreground          run in the foreground\n"
 "  -d, --device=FILE         input event device [" INPUT_EVENT_PATH "X]\n"
 "  -?, --help                print this help\n"
 "      --no-func-keys        don't log function keys, only character keys\n"
@@ -85,6 +86,7 @@ int main(int argc, char **argv) {
   if (argc < 2) { usage(); return EXIT_FAILURE; }
   
   bool flag_start = false;   // start logger
+  bool flag_foreground = false;   // start logger
   // bool flag_kill; is defined global for signal_handler to access it
   bool flag_us_keymap = false;  // use default us keymap if dynamic keymap unavailable
   bool flag_keymap = false;  // use keymap specified by keymap_filename
@@ -101,6 +103,7 @@ int main(int argc, char **argv) {
       {"start",     no_argument,       0, 's'},
       {"output",    required_argument, 0, 'o'},
       {"kill",      no_argument,       0, 'k'},
+      {"foreground",no_argument,       0, 'f'},
       {"device",    required_argument, 0, 'd'},
       {"help",      no_argument,       0, '?'},
 #define EXPORT_KEYMAP_INDEX 7
@@ -112,11 +115,12 @@ int main(int argc, char **argv) {
     char c;
     int option_index;
     
-    while ((c = getopt_long(argc, argv, "sm:o:ukd:?", long_options, &option_index)) != -1)
+    while ((c = getopt_long(argc, argv, "sm:o:ukfd:?", long_options, &option_index)) != -1)
       switch (c) {
         case 's': flag_start = true;                            break;
         case 'o': log_filename = optarg;                        break;
         case 'k': flag_kill = true;                             break;
+        case 'r': flag_foreground = true;                             break;
         case 'd': device_filename = optarg;                     break;
         
         case  0 : 
@@ -203,6 +207,7 @@ int main(int argc, char **argv) {
   
   { // everything went well up to now, let's become daemon
     
+   if (!flag_foreground) {
     switch (fork()) {
       case 0: break;  // child continues
       case -1:  // error
@@ -220,6 +225,7 @@ int main(int argc, char **argv) {
       default: return EXIT_SUCCESS;  // parent exits
     }
     close(0);  // drop stdin
+   }
   } //\ daemon
   
   // create temp file carrying PID for later retrieval
