@@ -1,18 +1,18 @@
-This work was packaged for Debian by:
+The original work was packaged for Debian by:
 
     Vedran Furač <vedran.furac@gmail.com> on Sun, 07 Feb 2010 01:06:25 +0100
 
-It was downloaded from:
-
-    http://countkeys.googlecode.com/files/countkeys-0.1.0.tar.gz
-
 Upstream Author(s):
 
+    Rich Healey <richo@psych0tik.net>
+
+Original Author(s):
+    
     Kernc <kerncece+countkeys@gmail.com>
 
 Copyright:
 
-    Copyright (C) 2000 Kernc
+    Copyright (C) 2011 richo
 
 License:
 
