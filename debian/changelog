@@ -1,6 +1,12 @@
+countkeys (0.3) unstable; urgency=low
+
+  * Updated documentation to reflect the differences between logkeys
+
+ -- Rich Healey <richo@psych0tik.net>  Tue, 16 Aug 2011 12:31:51 +1000
+
 countkeys (0.2) unstable; urgency=low
 
   * Initial Release
 
- -- Rich Healey <richo@psych0tik.net>  Tue, 16 Aug 2004 07:46:51 +0100
+ -- Rich Healey <richo@psych0tik.net>  Tue, 16 Aug 2011 07:46:51 +1000
 
