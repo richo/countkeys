@@ -263,9 +263,9 @@ int main(int argc, char **argv) {
 
   time_t cur_time;
   time(&cur_time);
-  strftime(timestamp, sizeof(timestamp), "\n%F %T%z > ", localtime(&cur_time));
+  strftime(timestamp, sizeof(timestamp), "%F %T%z", localtime(&cur_time));
   
-  fprintf(stdout, "Logging started ...\n%s", timestamp);
+  fprintf(stdout, "Logging started ...%s\n\n", timestamp);
   fflush(stdout);
 
   while (true) {  // infinite loop: exit gracefully by receiving SIGHUP, SIGINT or SIGTERM
@@ -294,8 +294,8 @@ int main(int argc, char **argv) {
   // append final timestamp, close files and exit
   time(&cur_time);
   strftime(timestamp, sizeof(timestamp), "%F %T%z", localtime(&cur_time));
-  fprintf(stdout, "\n\nKeys pressed: %i\n\n", presses);
-  fprintf(stdout, "\n\nLogging stopped at %s\n\n", timestamp);
+  fprintf(stdout, "Keys pressed: %i\n\n", presses);
+  fprintf(stdout, "Logging stopped at %s\n", timestamp);
   
   fclose(stdout);
   close(input_fd);
