@@ -47,7 +47,7 @@ can probably skip ahead to the next section now.
 
 To ever uninstall countkeys, remove accompanying scripts and manuals, issue
 
- # make uninstall    # in the same countkeys-0.1.0/build dir from before
+ # make uninstall    # in the same countkeys/build dir from before
 
 To install the binaries in path other than /usr/local/bin, use configure with
 --prefix switch, for example:
@@ -84,16 +84,24 @@ Default log file is /var/log/countkeys.log and is not readable by others.
 
 I suggest you first test the program manually with
 
- $ touch test.log
- $ countkeys --start --output test.log
+ $ countkeys --start --foreground
 
-and in the other terminal follow it with
+Which launches countkeys without detaching from the terminal and logs to stdout
 
- $ tail --follow test.log
+You should see a line like 
 
-and see if the pressed keys match to those noted.
+  Logging started ...2011-08-16 17:46:38+1000
 
-countkeys acts as a daemon, and you stop the running logger process with
+At this time, press some keys and then press ^C to kill countkeys. Bear in mind
+that countkeys processes events with a resolution of 1 second, so killing
+immediately after keypresses will not include those keypresses in keycount's
+output.
+
+To start countkeys as a daemon, invoke without the --foreground switch, and
+observe it's output in /var/log/countkeys.log If you enable the init script for
+countkeys, you will thus see how many keys typed per boot.
+
+In this mode, countkeys acts as a daemon, and you stop the running logger process with
 
  $ countkeys --kill
 
@@ -117,5 +125,11 @@ Always provide descriptively keyworded summary and description.
 
 You are more than welcome to implement unreasonable features yourself, as well
 as hack the program to your liking.
+
++------------------------------------------------
+ 5. Credits
+===============================================================================
+
+Countkeys is a fork of logkeys by Kernc <kerncece+countkeys@gmail.com>
 
 ~
