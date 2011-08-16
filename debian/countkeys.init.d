@@ -5,7 +5,7 @@
 # Required-Stop:     $remote_fs
 # Default-Start:     2 3 4 5
 # Default-Stop:      0 1 6
-# Short-Description: Start the countkeys keylogger.
+# Short-Description: Start the countkeys keycounter.
 ### END INIT INFO
 
 
