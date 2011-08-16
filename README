@@ -1,5 +1,5 @@
 ===============================================================================
- countkeys - a GNU/Linux keylogger that works!
+ countkeys - a GNU/Linux keycounter that works!
 ===============================================================================
 
   0. Licence
@@ -34,9 +34,9 @@ know
 Provided your GNU/Linux distribution doesn't include countkeys package in its
 repositories, manual installation of countkeys from source is as easy as:
 
- $ tar xvzf countkeys-0.1.0.tar.gz      # to extract the countkeys archive
+ $ git clone git@github.com:richoH/countkeys.git  # to extract the countkeys archive
  
- $ cd countkeys-0.1.0/build     # move to build directory to build there
+ $ cd countkeys/build     # move to build directory to build there
  $ ../configure               # invoke configure from parent directory
  $ make                       # make compiles what it needs to compile
  ( become super↙user now )    # you need root to install in system dir
@@ -77,16 +77,8 @@ A copy of these instructions is in the accompanying INSTALL file.
  3. Usage how-to
 ===============================================================================
 
-countkeys is simple. You can either invoke it directly, by typing full command 
-line, or use the provided scripts. There are two scripts in this package:
-
- bin/lkl  , which starts the countkeys daemon, and
- bin/lklk , which kills it.
-
-You can use these two scripts for starting and stopping the keylogger quickly
-and covertly. You can modify the scripts as you like.
-Note that countkeys is installed setuid, so the root password need not be
-provided at runtime.
+countkeys is simple. You can either invoke it directly or by typing full command 
+line.
 
 Default log file is /var/log/countkeys.log and is not readable by others.
 
@@ -99,56 +91,16 @@ and in the other terminal follow it with
 
  $ tail --follow test.log
 
-and see if the pressed keys match to those noted. If you use a US keyboard
-layout, use -u switch. Make sure your terminal character locale is set to UTF-8
-
- $ locale
- LANG=xx_YY.UTF-8
- LC_CTYPE="xx_YY.UTF-8"
- ...
-
-or alternatively, you need en_US.UTF-8 locale available on your system
-
- $ locale -a
- ...
- en_US.UTF-8
- ...
-
-otherwise you will only see odd characters (like ꑶ) when pressing character
-keys.
-
-It is very likely that you will see only some characters recognized, without
-any hope for Shift and AltGr working even slightly correct, especially when
-starting countkeys in X. In that case it is better to switch to virtual terminal, 
-e.g. tty4 (Ctrl+Alt+F4), and there execute:
-
- $ countkeys --export-keymap my_lang.keymap
-
-Then open my_lang.keymap in UTF-8 enabled text editor and manually repair any
-missing or incorrectly determined mappings. From then on, execute countkeys by
-
- $ countkeys --start --keymap my_lang.keymap
-
-Again, see if it now works correctly (character keys appear correct when you
-are viewing the log file in editor), and opt to modify bin/lkl starter script.
+and see if the pressed keys match to those noted.
 
 countkeys acts as a daemon, and you stop the running logger process with
 
  $ countkeys --kill
 
-(or bin/lklk provided script).
-
 For more information about countkeys log file format, countkeys keymap format, and
 command line arguments, read the application manual,
 
  $ man countkeys
-
-or see the wiki at project website: http://code.google.com/p/countkeys/
-
-If you create full and completely valid keymap for your particular language,
-please upload it to website or send it to me by e-mail. Thanks.
-
-Abuse the output of this software wisely.
 
 
 +------------------------------------------------
@@ -157,22 +109,13 @@ Abuse the output of this software wisely.
 
 Read the man page.
 
-Refer to troubleshooting and FAQ sections on the project website,
-
- http://code.google.com/p/countkeys/ ,
-
-for currently known issues, ways to resolve them, and any other information.
-
 Report any bugs and request reasonable features on the issues list page
 
- http://code.google.com/p/countkeys/issues .
+ https://github.com/richoH/countkeys/issues .
 
 Always provide descriptively keyworded summary and description.
 
 You are more than welcome to implement unreasonable features yourself, as well
 as hack the program to your liking.
-
-If you are a pr0, please answer the few questions I commented in the source.
-Thanks.
 
 ~
