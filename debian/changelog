@@ -1,3 +1,11 @@
+countkeys (0.4) unstable; urgency=low
+
+  * Finalised documenation throughout package
+
+  * Updated log format to be cleaner and more representative of the software
+
+ -- Rich Healey <richo@psych0tik.net>  Wed, 17 Aug 2011 11:44:51 +1000
+
 countkeys (0.3) unstable; urgency=low
 
   * Updated documentation to reflect the differences between logkeys
