@@ -1,7 +1,7 @@
 countkeys for Debian
 ------------------
 
-Logkeys is disabled by default. Before using it you will need to set
+Countkeys is disabled by default. Before using it you will need to set
 DEVICE variable in /etc/default/countkeys. Check /proc/bus/input/devices,
 for your keyboard and find line that looks like:
 
@@ -9,5 +9,6 @@ H: Handlers=kbd eventXX
 
 Use value from above and set DEVICE to /dev/input/eventXX.
 
- -- Vedran Furač <vedran.furac@gmail.com>  Sun, 07 Feb 2010 01:06:25 +0100
+This was originally done by Vedran Furač <vedran.furac@gmail.com>
 
+  -- Rich Healey <richo@psych0tik.net> Wed, 17 Aug 2011 11:39:25 +1000
