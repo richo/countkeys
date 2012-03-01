@@ -1,3 +1,9 @@
+countkeys (0.5) unstable; urgency=low
+
+  * Print usage on recieving USR1 like dd
+
+ -- Rich Healey <richo@psych0tik.net>  Thu, 01 Mar 2012 11:23:11 +1100
+
 countkeys (0.4) unstable; urgency=low
 
   * Finalised documenation throughout package
