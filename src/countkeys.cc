@@ -73,9 +73,15 @@ std::string exec(const char* cmd) {
 }
 
 bool flag_kill = false;  // kill any running countkeys process
+int presses = 0;         // Counter to keep track of presses
 
-void signal_handler(int interrupt) {
+void exit_signal_handler(int interrupt) {
   flag_kill = true;
+}
+
+void usr1_signal_handler(int interrupt) {
+  fprintf(stdout, "Keys pressed: %i\n\n", presses);
+  fflush(stdout);
 }
 
 int main(int argc, char **argv) {
@@ -186,11 +192,15 @@ int main(int argc, char **argv) {
   
   { // catch SIGHUP, SIGINT and SIGTERM signals to exit gracefully
     
-    struct sigaction act = {};
-    act.sa_handler = signal_handler;
-    sigaction(SIGHUP,  &act, NULL);
-    sigaction(SIGINT,  &act, NULL);
-    sigaction(SIGTERM, &act, NULL);
+    struct sigaction act_exit = {};
+    struct sigaction act_usr1 = {};
+    act_exit.sa_handler = exit_signal_handler;
+    sigaction(SIGHUP,  &act_exit, NULL);
+    sigaction(SIGINT,  &act_exit, NULL);
+    sigaction(SIGTERM, &act_exit, NULL);
+    act_usr1.sa_handler = usr1_signal_handler;
+    sigaction(SIGUSR1, &act_usr1, NULL);
+
   } //\ signals
   
   { // everything went well up to now, let's become daemon
@@ -259,7 +269,6 @@ int main(int argc, char **argv) {
   
   struct input_event event;
   char timestamp[32];  // timestamp string, long enough to hold "\n%F %T%z > "
-  int presses = 0; // Counter to keep track of presses
 
   time_t cur_time;
   time(&cur_time);
