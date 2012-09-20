@@ -126,7 +126,7 @@ Read the man page.
 
 Report any bugs and request reasonable features on the issues list page
 
-   https://github.com/richoH/countkeys/issues
+   https://github.com/richo/countkeys/issues
 
 Always provide descriptively keyworded summary and description.
 
