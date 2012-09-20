@@ -34,7 +34,7 @@ git clone git@github.com:richoH/countkeys.git  # to extract the countkeys archiv
 cd countkeys/build         # move to build directory to build there
 ../configure               # invoke configure from parent directory
 make                       # make compiles what it needs to compile
-# become super↙user now )  # you need root to install in system dir
+# become superuser now     # you need root to install in system dir
 make install               # installs binaries, manuals and scripts
 ```
 
